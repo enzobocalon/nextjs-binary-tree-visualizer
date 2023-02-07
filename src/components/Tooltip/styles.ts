@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
 export const MainContainer = styled.div`
+  & ~ & {
+    margin-top: 1rem;
+  }
+
   .TooltipContent {
 
     font-size: .95rem;
@@ -16,6 +20,7 @@ export const MainContainer = styled.div`
     animation-duration: .3s;
     animation-name: slideRight;
     animation-timing-function: ease-in-out;
+    z-index: 100;
 
     ::before {
       content: '';
@@ -29,6 +34,7 @@ export const MainContainer = styled.div`
       left: -10px;
       top: 50%;
       transform: translateY(-50%);
+      filter: drop-shadow( -6.5px 2px 4px rgba(0, 0, 0, 0.24));
     }
 
     @keyframes slideRight {

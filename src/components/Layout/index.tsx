@@ -23,12 +23,10 @@ export default function Layout() {
 
 	const addTreeNode = (data: number) => {
 		const currentNode = binaryTree.insert(data);
-		console.log(currentNode);
 		if (currentNode === null) {
 			return;
 		}
 
-		console.log('passou no addTreeNode');
 		setNodes(nodes => [
 			...nodes,
 			{
@@ -60,7 +58,7 @@ export default function Layout() {
 	return (
 		<S.Container>
 			<button onClick={() => addTreeNode(10 - Math.ceil((Math.random() * 9)))}>Debug</button>
-			<Toolbar />
+			<Toolbar addTreeNode={addTreeNode}/>
 			<ReactFlow
 				nodes={nodes}
 				edges={edges}

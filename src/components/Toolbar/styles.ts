@@ -11,18 +11,29 @@ export const Container = styled.div`
   border-radius: .5rem;
 `;
 
+export const ItemContainer = styled.div`
+  position: relative;
+  border-radius: 8px;
+`;
+
 export const Item = styled.div`
   cursor: pointer;
-  position: relative;
-  padding: .5rem;
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .3s ease;
+
+  border-radius: 6px;
+  border: 1px solid transparent;
 
   &:hover {
     svg {
       color: #A35AFE;
     }
-  }
-
-  & ~ & {
-    margin-top: 1rem;
+    border: 1px solid #A35AFE;
+    transition: all .3s ease;
   }
 `;

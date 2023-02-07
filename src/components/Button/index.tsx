@@ -8,7 +8,7 @@ interface Props {
 
 export default function Button({children, onClick}: Props) {
 	return (
-		<S.Button>
+		<S.Button onClick={(onClick)}>
 			{children}
 		</S.Button>
 	);
