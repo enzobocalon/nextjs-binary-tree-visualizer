@@ -11,9 +11,12 @@ interface Props {
   addTreeNode: (data: number) => void
   findRoot: () => void;
   resetTree: () => void
+  preOrder: () => void
+  postOrder: () => void
+  inOrder: () => void
 }
 
-export default function Toolbar({addTreeNode, findRoot, resetTree}: Props) {
+export default function Toolbar({addTreeNode, findRoot, resetTree, preOrder, postOrder, inOrder}: Props) {
 	const [openedMenu, setOpenedMenu] = useState<number | null>(null);
 	const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -22,6 +25,7 @@ export default function Toolbar({addTreeNode, findRoot, resetTree}: Props) {
 		if (!inputRef.current) return;
 		if (Number(inputRef.current.value)) {
 			addTreeNode(parseInt(inputRef.current.value));
+			inputRef.current.value = '';
 		}
 	};
 
@@ -55,7 +59,11 @@ export default function Toolbar({addTreeNode, findRoot, resetTree}: Props) {
 					<AnimatePresence>
 						{
 							openedMenu === 1 && (
-								<Actions key={'actions'}/>
+								<Actions
+									key={'actions'}
+									preOrder={preOrder}
+									postOrder={postOrder}
+									inOrder={inOrder}/>
 							)
 						}
 					</AnimatePresence>

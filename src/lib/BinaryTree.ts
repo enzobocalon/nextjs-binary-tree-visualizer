@@ -130,10 +130,11 @@ export class BinaryTree {
 	preorder(node: Node | null) {
 		if(node !== null)
 		{
-			console.log(node.data);
-			this.preorder(node.left);
-			this.preorder(node.right);
+			const leftNodes: Node[] = this.preorder(node.left);
+			const rightNodes: Node[] = this.preorder(node.right);
+			return [node, ...leftNodes, ...rightNodes];
 		}
+		return [];
 	}
 
 	inorder(node: Node | null) {
@@ -143,16 +144,15 @@ export class BinaryTree {
 			return [...leftNodes, node, ...rightNodes];
 		}
 		return [];
+	}
 
-		//   let nodes: Node[] = [];
-	// 	if(node !== null)
-	// 	{
-	// 		const leftNodes: Node[] = this.inorder(node.left);
-	// 		const rightNodes: Node[] = this.inorder(node.right);
-	// 		nodes = leftNodes.concat([node]).concat(rightNodes);
-	// 	}
-	// 	return nodes;
-	//
+	postorder(node: Node | null) {
+		if(node !== null) {
+			const leftNodes: Node[] = this.postorder(node.left);
+			const rightNodes: Node[] = this.postorder(node.right);
+			return [...leftNodes, ...rightNodes, node];
+		}
+		return [];
 	}
 
 }

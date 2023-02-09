@@ -13,7 +13,7 @@ interface Props {
 
 export default function Display({title, content, setDisplayTitle}: Props) {
 	return (
-		<AnimatePresence>
+		<AnimatePresence mode='wait'>
 			{title !== null && (
 				<S.Container
 					key={'displayModal'}

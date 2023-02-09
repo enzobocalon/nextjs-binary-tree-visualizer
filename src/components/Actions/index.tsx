@@ -1,6 +1,12 @@
 import * as S from './styles';
 
-export default function Actions() {
+interface Props {
+  preOrder: () => void
+  postOrder: () => void
+  inOrder: () => void
+}
+
+export default function Actions({inOrder, postOrder, preOrder}: Props) {
 	return (
 		<S.Container
 			initial={{opacity: 0, translateX: '-100px', translateY: '-50%' }}
@@ -11,13 +17,13 @@ export default function Actions() {
         Tree Search
 			</S.Title>
 			<S.ItemContainer>
-				<S.Item>
+				<S.Item onClick={preOrder}>
         Pre Order
 				</S.Item>
-				<S.Item>
-        Pos Order
+				<S.Item onClick={postOrder}>
+        Post Order
 				</S.Item>
-				<S.Item>
+				<S.Item onClick={inOrder}>
         In Order
 				</S.Item>
 			</S.ItemContainer>
