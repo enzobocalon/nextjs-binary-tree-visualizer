@@ -54,7 +54,7 @@ export default function Layout() {
 	const findRoot = useCallback(() => {
 		setDisplayTitle('Root');
 		if (!binaryTree.root) {
-			setDisplayContent('No tree found.');
+			setDisplayContent('Tree in empty');
 			const timeout = setTimeout(() => {
 				setDisplayTitle(null);
 				setDisplayContent(null);
@@ -88,7 +88,20 @@ export default function Layout() {
 	}, []);
 
 	const preOrder = useCallback(() => {
-		if (displayTitle !== null || displayContent !== null) {
+		if (displayTitle !== null) {
+			if (binaryTree.root === null) {
+				setDisplayTitle(null);
+				const timeout = setTimeout(() => {
+					setDisplayTitle('Pre Order');
+					setDisplayContent('Tree is empty');
+					clearInterval(timeout);
+				}, 300);
+				const closeTimeout = setTimeout(() => {
+					setDisplayTitle(null);
+					clearTimeout(closeTimeout);
+				}, 2300);
+				return;
+			}
 			setDisplayTitle(null);
 			setDisplayContent(null);
 			const timeout = setTimeout(() => {
@@ -96,6 +109,16 @@ export default function Layout() {
 				clearInterval(timeout);
 			}, 300);
 		} else {
+			if (binaryTree.root === null) {
+				setDisplayTitle('Pre Order');
+				setDisplayContent('Tree is empty');
+
+				const closeTimeout = setTimeout(() => {
+					setDisplayTitle(null);
+					clearTimeout(closeTimeout);
+				}, 2300);
+				return;
+			}
 			setDisplayTitle('Pre Order');
 		}
 
@@ -137,7 +160,21 @@ export default function Layout() {
 	}, [displayContent, displayTitle]);
 
 	const postOrder = useCallback(() => {
-		if (displayTitle !== null || displayContent !== null) {
+		if (displayTitle !== null) {
+			if (binaryTree.root === null) {
+				setDisplayTitle(null);
+				const timeout = setTimeout(() => {
+					setDisplayTitle('Post Order');
+					setDisplayContent('Tree is empty');
+					clearInterval(timeout);
+				}, 300);
+				const closeTimeout = setTimeout(() => {
+					console.log('teste');
+					setDisplayTitle(null);
+					clearTimeout(closeTimeout);
+				}, 2300);
+				return;
+			}
 			setDisplayTitle(null);
 			setDisplayContent(null);
 			const timeout = setTimeout(() => {
@@ -145,6 +182,16 @@ export default function Layout() {
 				clearInterval(timeout);
 			}, 300);
 		} else {
+			if (binaryTree.root === null) {
+				setDisplayTitle('Post Order');
+				setDisplayContent('Tree is empty');
+
+				const closeTimeout = setTimeout(() => {
+					setDisplayTitle(null);
+					clearTimeout(closeTimeout);
+				}, 2300);
+				return;
+			}
 			setDisplayTitle('Post Order');
 		}
 
@@ -186,7 +233,20 @@ export default function Layout() {
 	}, [displayContent, displayTitle]);
 
 	const inOrder = useCallback(() => {
-		if (displayTitle !== null || displayContent !== null) {
+		if (displayTitle !== null) {
+			if (binaryTree.root === null) {
+				setDisplayTitle(null);
+				const timeout = setTimeout(() => {
+					setDisplayTitle('In Order');
+					setDisplayContent('Tree is empty');
+					clearInterval(timeout);
+				}, 300);
+				const closeTimeout = setTimeout(() => {
+					setDisplayTitle(null);
+					clearTimeout(closeTimeout);
+				}, 2300);
+				return;
+			}
 			setDisplayTitle(null);
 			setDisplayContent(null);
 			const timeout = setTimeout(() => {
@@ -194,6 +254,16 @@ export default function Layout() {
 				clearInterval(timeout);
 			}, 300);
 		} else {
+			if (binaryTree.root === null) {
+				setDisplayTitle('In Order');
+				setDisplayContent('Tree is empty');
+
+				const closeTimeout = setTimeout(() => {
+					setDisplayTitle(null);
+					clearTimeout(closeTimeout);
+				}, 2300);
+				return;
+			}
 			setDisplayTitle('In Order');
 		}
 
