@@ -39,6 +39,7 @@ export class BinaryTree {
 
 				newNode.setCoordinates(node.getCoordX() - (this.width / Math.pow(2, nodeLevel)) - 2, node.getCoordY() + 100);
 				newNode.setParentID(node.id);
+				newNode.setParent(node);
 				return newNode;
 			} else {
 				return this.insertNode(node.left, newNode);
@@ -52,6 +53,7 @@ export class BinaryTree {
 
 				newNode.setCoordinates(node.getCoordX() + (this.width / Math.pow(2, nodeLevel)) - 2, node.getCoordY() + 100);
 				newNode.setParentID(node.id);
+				newNode.setParent(node);
 				return newNode;
 			} else {
 				return this.insertNode(node.right, newNode);
@@ -81,13 +83,78 @@ export class BinaryTree {
 		this.dataSet.add(data);
 	}
 
+	resetDataSet() {
+		this.dataSet.clear();
+	}
+
 	getDataFromSet(data: number) {
 		return this.dataSet.has(data);
+	}
+
+	getDataSet() {
+		return this.dataSet;
 	}
 
 	setWidth(width: number) {
 		this.width = width;
 	}
+
+	treeReset() {
+		this.root = null;
+	}
+
+	minValue(root: Node) {
+		let minv = root.data;
+		while (root.left != null)
+		{
+			minv = root.left.data;
+			root = root.left;
+		}
+		return minv;
+	}
+
+	search(node: Node | null, data: number): Node | null {
+		if(node === null)
+			return null;
+
+		else if(data < node.data)
+			return this.search(node.left, data);
+
+		else if(data > node.data)
+			return this.search(node.right, data);
+
+		else
+			return node;
+	}
+
+	preorder(node: Node | null) {
+		if(node !== null)
+		{
+			console.log(node.data);
+			this.preorder(node.left);
+			this.preorder(node.right);
+		}
+	}
+
+	inorder(node: Node | null) {
+		if(node !== null) {
+			const leftNodes: Node[] = this.inorder(node.left);
+			const rightNodes: Node[] = this.inorder(node.right);
+			return [...leftNodes, node, ...rightNodes];
+		}
+		return [];
+
+		//   let nodes: Node[] = [];
+	// 	if(node !== null)
+	// 	{
+	// 		const leftNodes: Node[] = this.inorder(node.left);
+	// 		const rightNodes: Node[] = this.inorder(node.right);
+	// 		nodes = leftNodes.concat([node]).concat(rightNodes);
+	// 	}
+	// 	return nodes;
+	//
+	}
+
 }
 
 

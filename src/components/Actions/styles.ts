@@ -7,12 +7,10 @@ export const Container = styled(motion.div)`
   top: 50%;
   transform: translateY(-50%);
   background-color: white;
-  padding: .5rem;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  border-radius: 4px;
-  display: flex;
+  border-radius: 8px;
   gap: 1rem;
-  width: 250px;
+  width: max-content;
   z-index: 500;
 
   ::before {
@@ -35,33 +33,40 @@ export const Container = styled(motion.div)`
       height: 32px;
     }
 
-    @media (max-width: 425px) {
-      width: 60vw;
-    }
 `;
 
-export const InputLabel = styled.label`
-  position: relative;
-`;
-
-export const StyledInput = styled.input`
-  width: 100%;
-  padding: .4rem .5rem;
-  border: 1px solid #e6e6e6;
-  border-radius: 4px;
-  outline: none;
-  background-color: white;
-  font-family: inherit;
-`;
-
-export const StyledSpan = styled.span`
-  position: absolute;
-  left: 0;
-  top: 0;
-  transform: translate(.5rem, -50%);
-  background-color: white;
-  font-size: .8rem;
-  color: #A35AFE;
+export const Title = styled.div`
+  padding: 0;
+  border-bottom: 1px solid #e6e6e6;
+  margin-block: .4rem;
+  padding-inline: 1.25rem;
   font-weight: bold;
+  color: #4e4e4e;
+  letter-spacing: .4px;
+
+  & ~ & {
+   margin-top: 1rem;
+  }
+`;
+
+export const ItemContainer = styled.div`
+  padding-inline: .75rem;
+
+`;
+
+export const Item = styled.div`
+  width: 100%;
+  cursor: pointer;
+  margin-block: .5rem;
+  padding: .25rem .5rem;
+  border-radius: 8px;
+  transition: all .3s ease;
   letter-spacing: .5px;
+  font-size: .95rem;
+  border: 1px solid transparent;
+  :hover {
+    transition: all .3s ease;
+    border: 1px solid #A35AFE;
+    color: #A35AFE;
+  }
 `;

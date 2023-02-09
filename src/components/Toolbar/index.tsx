@@ -1,15 +1,20 @@
 import { useRef, useState } from 'react';
-import { MdDone, MdOutlineAdd, MdRemove, MdSearch } from 'react-icons/md';
+import { MdDone, MdOutlineAdd, MdSearch, MdOutlineReplay } from 'react-icons/md';
+import { GiTreeRoots } from 'react-icons/gi';
 import Input from '../Input';
 import Tooltip from '../Tooltip';
 import * as S from'./styles';
+import Actions from '../Actions';
+import { AnimatePresence } from 'framer-motion';
 
 interface Props {
   addTreeNode: (data: number) => void
+  findRoot: () => void;
+  resetTree: () => void
 }
 
-export default function Toolbar({addTreeNode}: Props) {
-	const [openedMenu, setOpenedMenu] = useState<number | null>(0);
+export default function Toolbar({addTreeNode, findRoot, resetTree}: Props) {
+	const [openedMenu, setOpenedMenu] = useState<number | null>(null);
 	const inputRef = useRef<HTMLInputElement | null>(null);
 
 	const handleAdd = () => {
@@ -20,12 +25,6 @@ export default function Toolbar({addTreeNode}: Props) {
 		}
 	};
 
-	const handleRemove = () => {
-		if (!inputRef) return;
-		if (!inputRef.current) return;
-	};
-
-
 	return (
 		<S.Container>
 			<Tooltip content='Insert value' shouldRender={openedMenu !== 0}>
@@ -33,31 +32,48 @@ export default function Toolbar({addTreeNode}: Props) {
 					<S.Item onClick={() => setOpenedMenu(prev => prev === 0 ? null : 0)}>
 						<MdOutlineAdd size={24}/>
 					</S.Item>
-					{
-						openedMenu === 0 && (
-							<Input label='Insert a value' action={handleAdd} icon={<MdDone />} reference={inputRef}/>
-						)
-					}
+					<AnimatePresence>
+						{
+							openedMenu === 0 && (
+								<Input
+									label='Insert a value'
+									action={handleAdd}
+									icon={<MdDone />}
+									reference={inputRef}
+									key={'input'}/>
+							)
+						}
+					</AnimatePresence>
 				</S.ItemContainer>
 			</Tooltip>
 
-			<Tooltip content='Remove Value' shouldRender={openedMenu !== 1}>
+			<Tooltip content='Search in Tree' shouldRender={openedMenu !== 1}>
 				<S.ItemContainer>
 					<S.Item onClick={() => setOpenedMenu(prev => prev === 1 ? null : 1)}>
-						<MdRemove size={24}/>
+						<MdSearch size={24}/>
 					</S.Item>
-					{
-						openedMenu === 1 && (
-							<Input label='Remove a value' action={handleRemove} icon={<MdDone />} reference={inputRef}/>
-						)
-					}
+					<AnimatePresence>
+						{
+							openedMenu === 1 && (
+								<Actions key={'actions'}/>
+							)
+						}
+					</AnimatePresence>
 				</S.ItemContainer>
 			</Tooltip>
 
-			<Tooltip content='Search in Tree' shouldRender={openedMenu !== 2}>
+			<Tooltip content='Find Root' shouldRender={openedMenu !== 1}>
 				<S.ItemContainer>
-					<S.Item>
-						<MdSearch size={24}/>
+					<S.Item onClick={findRoot}>
+						<GiTreeRoots size={24}/>
+					</S.Item>
+				</S.ItemContainer>
+			</Tooltip>
+
+			<Tooltip content='Reset Tree' shouldRender={openedMenu !== 1}>
+				<S.ItemContainer>
+					<S.Item onClick={resetTree}>
+						<MdOutlineReplay size={24}/>
 					</S.Item>
 				</S.ItemContainer>
 			</Tooltip>
