@@ -12,10 +12,10 @@ import 'reactflow/dist/style.css';
 import Display from '../Display';
 import Toolbar from '../Toolbar';
 import * as S from './styles';
+
 const fitViewOptions: FitViewOptions = {
 	padding: 1,
 };
-
 
 export default function Layout() {
 	const binaryTree = useMemo(() => new BinaryTree(), []);
@@ -27,7 +27,7 @@ export default function Layout() {
 
 	const addTreeNode = useCallback((data: number) => {
 		const currentNode = binaryTree.insert(data);
-		if (currentNode === null) return;
+		if (!currentNode) return;
 
 		setNodes(nodes => [
 			...nodes,
@@ -35,10 +35,11 @@ export default function Layout() {
 				id: currentNode.id,
 				position: {
 					x: currentNode.getCoordX(),
-					y: currentNode.getCoordY()
+					y: currentNode.getCoordY(),
 				},
 				data: { label: currentNode.data },
-			} as Node
+				className: '',
+			} as Node,
 		]);
 		setEdges(edges => [
 			...edges,
@@ -46,25 +47,24 @@ export default function Layout() {
 				id: crypto.randomUUID(),
 				source: currentNode.parentID,
 				target: currentNode.id,
-				type: 'straight'
-			} as Edge
+				type: 'straight',
+			} as Edge,
 		]);
-	}, [nodes, edges]);
+	}, [binaryTree, nodes, edges, setNodes, setEdges]);
 
 	const findRoot = useCallback(() => {
 		setDisplayTitle('Root');
 		if (!binaryTree.root) {
-			setDisplayContent('Tree in empty');
-			const timeout = setTimeout(() => {
+			setDisplayContent('Tree is empty');
+			setTimeout(() => {
 				setDisplayTitle(null);
 				setDisplayContent(null);
-				clearTimeout(timeout);
 			}, 3000);
 			return;
 		}
 		setDisplayContent(binaryTree.root.data);
 		setNodes(nodes => nodes.map((node: Node) => {
-			if (node.data.label === binaryTree.root!.data) {
+			if (node.data.label === binaryTree.root?.data) {
 				return {
 					...node,
 					className: 'active'
@@ -72,9 +72,9 @@ export default function Layout() {
 			}
 			return node;
 		}));
-		const timeout = setTimeout(() => {
+		setTimeout(() => {
 			setNodes(nodes => nodes.map((node: Node) => {
-				if (node.data.label === binaryTree.root!.data) {
+				if (node.data.label === binaryTree.root?.data) {
 					return {
 						...node,
 						className: ''
@@ -82,227 +82,62 @@ export default function Layout() {
 				}
 				return node;
 			}));
-			clearTimeout(timeout);
 		}, 1000);
-
 	}, []);
 
-	const preOrder = useCallback(() => {
-		if (displayTitle !== null) {
-			if (binaryTree.root === null) {
-				setDisplayTitle(null);
-				const timeout = setTimeout(() => {
-					setDisplayTitle('Pre Order');
-					setDisplayContent('Tree is empty');
-					clearInterval(timeout);
-				}, 300);
-				const closeTimeout = setTimeout(() => {
-					setDisplayTitle(null);
-					clearTimeout(closeTimeout);
-				}, 2300);
-				return;
-			}
+
+	const handleOrder = (order: string) => {
+		if (!binaryTree.root) {
 			setDisplayTitle(null);
-			setDisplayContent(null);
-			const timeout = setTimeout(() => {
-				setDisplayTitle('Pre Order');
-				clearInterval(timeout);
-			}, 300);
-		} else {
-			if (binaryTree.root === null) {
-				setDisplayTitle('Pre Order');
+			setTimeout(() => {
+				setDisplayTitle(order);
 				setDisplayContent('Tree is empty');
-
-				const closeTimeout = setTimeout(() => {
-					setDisplayTitle(null);
-					clearTimeout(closeTimeout);
-				}, 2300);
-				return;
-			}
-			setDisplayTitle('Pre Order');
+			}, 300);
+			setTimeout(() => {
+				setDisplayTitle(null);
+			}, 2300);
+			return;
 		}
 
-		const preOrderArray = binaryTree.preorder(binaryTree.root);
-		if (preOrderArray) {
-			preOrderArray.map(node => {
-				if (node !== null) {
-					setDisplayContent(prev => `${prev !== null ? prev + ' -' : ''} ${node.data}`);
-				}
-			});
-		}
-		preOrderArray.map((arrayNode, index) => {
-			const timeout1 = setTimeout(() => {
-				setNodes(nodes => nodes.map((node: Node) => {
-					if (node.data.label === arrayNode.data) {
-						return {
-							...node,
-							className: 'active'
-						};
-					}
-					return node;
-				}));
-				clearTimeout(timeout1);
+		setDisplayTitle(null);
+		setDisplayContent(null);
+		setTimeout(() => {
+			setDisplayTitle(order);
+		}, 300);
+
+		const orderArray = order === 'Pre Order' ?
+      	binaryTree.preorder(binaryTree.root) :
+      	order === 'In Order' ?
+      		binaryTree.inorder(binaryTree.root) :
+      		binaryTree.postorder(binaryTree.root);
+
+		orderArray.map((arrayNode, index) => {
+			if (!arrayNode) return;
+			setDisplayContent((prev) => (prev ? `${prev} - ${arrayNode.data}` : arrayNode.data));
+			setTimeout(() => {
+				setNodes((nodes) =>
+					nodes.map((node: Node) =>
+						node.data.label === arrayNode.data
+							? { ...node, className: 'active' }
+							: node
+					)
+				);
 			}, index * 1000);
-			const timeout = setTimeout(() => {
-				setNodes(nodes => nodes.map((node: Node) => {
-					if (node.data.label === arrayNode.data){
-						return {
-							...node,
-							className: ''
-						};
-					}
-					return node;
-				}));
-				clearTimeout(timeout);
+			setTimeout(() => {
+				setNodes((nodes) =>
+					nodes.map((node: Node) =>
+						node.data.label === arrayNode.data
+							? { ...node, className: '' }
+							: node
+					)
+				);
 			}, (index + 1) * 1000);
 		});
-		return;
-	}, [displayContent, displayTitle]);
+	};
 
-	const postOrder = useCallback(() => {
-		if (displayTitle !== null) {
-			if (binaryTree.root === null) {
-				setDisplayTitle(null);
-				const timeout = setTimeout(() => {
-					setDisplayTitle('Post Order');
-					setDisplayContent('Tree is empty');
-					clearInterval(timeout);
-				}, 300);
-				const closeTimeout = setTimeout(() => {
-					console.log('teste');
-					setDisplayTitle(null);
-					clearTimeout(closeTimeout);
-				}, 2300);
-				return;
-			}
-			setDisplayTitle(null);
-			setDisplayContent(null);
-			const timeout = setTimeout(() => {
-				setDisplayTitle('Post Order');
-				clearInterval(timeout);
-			}, 300);
-		} else {
-			if (binaryTree.root === null) {
-				setDisplayTitle('Post Order');
-				setDisplayContent('Tree is empty');
-
-				const closeTimeout = setTimeout(() => {
-					setDisplayTitle(null);
-					clearTimeout(closeTimeout);
-				}, 2300);
-				return;
-			}
-			setDisplayTitle('Post Order');
-		}
-
-		const postOrderArray = binaryTree.postorder(binaryTree.root);
-		if (postOrderArray) {
-			postOrderArray.map(node => {
-				if (node !== null) {
-					setDisplayContent(prev => `${prev !== null ? prev + ' -' : ''} ${node.data}`);
-				}
-			});
-		}
-		postOrderArray.map((arrayNode, index) => {
-			const timeout1 = setTimeout(() => {
-				setNodes(nodes => nodes.map((node: Node) => {
-					if (node.data.label === arrayNode.data) {
-						return {
-							...node,
-							className: 'active'
-						};
-					}
-					return node;
-				}));
-				clearTimeout(timeout1);
-			}, index * 1000);
-			const timeout = setTimeout(() => {
-				setNodes(nodes => nodes.map((node: Node) => {
-					if (node.data.label === arrayNode.data){
-						return {
-							...node,
-							className: ''
-						};
-					}
-					return node;
-				}));
-				clearTimeout(timeout);
-			}, (index + 1) * 1000);
-		});
-		return;
-	}, [displayContent, displayTitle]);
-
-	const inOrder = useCallback(() => {
-		if (displayTitle !== null) {
-			if (binaryTree.root === null) {
-				setDisplayTitle(null);
-				const timeout = setTimeout(() => {
-					setDisplayTitle('In Order');
-					setDisplayContent('Tree is empty');
-					clearInterval(timeout);
-				}, 300);
-				const closeTimeout = setTimeout(() => {
-					setDisplayTitle(null);
-					clearTimeout(closeTimeout);
-				}, 2300);
-				return;
-			}
-			setDisplayTitle(null);
-			setDisplayContent(null);
-			const timeout = setTimeout(() => {
-				setDisplayTitle('In Order');
-				clearInterval(timeout);
-			}, 300);
-		} else {
-			if (binaryTree.root === null) {
-				setDisplayTitle('In Order');
-				setDisplayContent('Tree is empty');
-
-				const closeTimeout = setTimeout(() => {
-					setDisplayTitle(null);
-					clearTimeout(closeTimeout);
-				}, 2300);
-				return;
-			}
-			setDisplayTitle('In Order');
-		}
-
-		const inOrderArray = binaryTree.inorder(binaryTree.root);
-		if (inOrderArray) {
-			inOrderArray.map(node => {
-				if (node !== null) {
-					setDisplayContent(prev => `${prev !== null ? prev + ' -' : ''} ${node.data}`);
-				}
-			});
-		}
-		inOrderArray.map((arrayNode, index) => {
-			const timeout = setTimeout(() => {
-				setNodes(nodes => nodes.map((node: Node) => {
-					if (node.data.label === arrayNode.data) {
-						return {
-							...node,
-							className: 'active'
-						};
-					}
-					return node;
-				}));
-				clearTimeout(timeout);
-			}, index * 1000);
-			const timeoutRemove = setTimeout(() => {
-				setNodes(nodes => nodes.map((node: Node) => {
-					if (node.data.label === arrayNode.data){
-						return {
-							...node,
-							className: ''
-						};
-					}
-					return node;
-				}));
-				clearTimeout(timeoutRemove);
-			}, (index + 1) * 1000);
-		});
-
-	}, [displayContent, displayTitle]);
+	const preOrder = useCallback(() => handleOrder('Pre Order'), []);
+	const postOrder = useCallback(() => handleOrder('Post Order'), []);
+	const inOrder = useCallback(() => handleOrder('In Order'), []);
 
 	const resetTree = useCallback(() => {
 		binaryTree.treeReset();
@@ -311,7 +146,7 @@ export default function Layout() {
 		setEdges([]);
 		setDisplayTitle(null);
 		setDisplayContent(null);
-	}, [nodes, edges]);
+	}, []);
 
 
 	return (
