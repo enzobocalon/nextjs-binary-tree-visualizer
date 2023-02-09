@@ -33,7 +33,8 @@ export default function Toolbar({addTreeNode, findRoot, resetTree, preOrder, pos
 					openedMenu={openedMenu}
 					preOrder={preOrder}
 					postOrder={postOrder}
-					inOrder={inOrder}/>
+					inOrder={inOrder}
+					addTreeNode={addTreeNode}/>
 			</Tooltip>
 
 			<Tooltip content='Find Root' shouldRender={openedMenu !== 1}>

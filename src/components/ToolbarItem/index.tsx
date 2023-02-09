@@ -13,7 +13,6 @@ interface Props {
   postOrder?: () => void
   inOrder?: () => void
   addTreeNode?: (data: number) => void
-  handleWidth?: () => void;
 }
 
 export const ToolbarItem = forwardRef<HTMLDivElement, Props>((
