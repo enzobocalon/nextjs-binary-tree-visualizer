@@ -7,7 +7,7 @@ export class BinaryTree {
 	constructor () {
 		this.root = null;
 		this.dataSet = new Set();
-		this.width = 800;
+		this.width = 1200;
 	}
 
 	insert(data: number) {
@@ -95,36 +95,8 @@ export class BinaryTree {
 		return this.dataSet;
 	}
 
-	setWidth(width: number) {
-		this.width = width;
-	}
-
 	treeReset() {
 		this.root = null;
-	}
-
-	minValue(root: Node) {
-		let minv = root.data;
-		while (root.left != null)
-		{
-			minv = root.left.data;
-			root = root.left;
-		}
-		return minv;
-	}
-
-	search(node: Node | null, data: number): Node | null {
-		if(node === null)
-			return null;
-
-		else if(data < node.data)
-			return this.search(node.left, data);
-
-		else if(data > node.data)
-			return this.search(node.right, data);
-
-		else
-			return node;
 	}
 
 	preorder(node: Node | null) {

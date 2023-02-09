@@ -73,4 +73,28 @@ remove(key: number)
 
 	}
 
+minValue(root: Node) {
+		let minv = root.data;
+		while (root.left != null)
+		{
+			minv = root.left.data;
+			root = root.left;
+		}
+		return minv;
+	}
+
+	search(node: Node | null, data: number): Node | null {
+		if(node === null)
+			return null;
+
+		else if(data < node.data)
+			return this.search(node.left, data);
+
+		else if(data > node.data)
+			return this.search(node.right, data);
+
+		else
+			return node;
+	}
+
 Not implemented to prevent errors. Tree reset works better.
