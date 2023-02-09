@@ -50,7 +50,28 @@ export default function Layout() {
 				type: 'straight',
 			} as Edge,
 		]);
-	}, [binaryTree, nodes, edges, setNodes, setEdges]);
+	}, []);
+
+	const highlightNode = (nodeData: number, index: number | null) => {
+		setTimeout(() => {
+			setNodes(nodes =>
+				nodes.map((node: Node) =>
+					node.data.label === nodeData
+						? { ...node, className: 'active' }
+						: node
+				)
+			);
+		}, index ? index * 1000 : 0);
+		setTimeout(() => {
+			setNodes(nodes =>
+				nodes.map((node: Node) =>
+					node.data.label === nodeData
+						? { ...node, className: '' }
+						: node
+				)
+			);
+		}, index ? (index + 1) * 1000 : 1000);
+	};
 
 	const findRoot = useCallback(() => {
 		setDisplayTitle('Root');
@@ -63,28 +84,8 @@ export default function Layout() {
 			return;
 		}
 		setDisplayContent(binaryTree.root.data);
-		setNodes(nodes => nodes.map((node: Node) => {
-			if (node.data.label === binaryTree.root?.data) {
-				return {
-					...node,
-					className: 'active'
-				};
-			}
-			return node;
-		}));
-		setTimeout(() => {
-			setNodes(nodes => nodes.map((node: Node) => {
-				if (node.data.label === binaryTree.root?.data) {
-					return {
-						...node,
-						className: ''
-					};
-				}
-				return node;
-			}));
-		}, 1000);
+		highlightNode(binaryTree.root.data, null);
 	}, []);
-
 
 	const handleOrder = (order: string) => {
 		if (!binaryTree.root) {
@@ -98,41 +99,22 @@ export default function Layout() {
 			}, 2300);
 			return;
 		}
-
-		setDisplayTitle(null);
+		setDisplayTitle(order);
 		setDisplayContent(null);
-		setTimeout(() => {
-			setDisplayTitle(order);
-		}, 300);
 
 		const orderArray = order === 'Pre Order' ?
-      	binaryTree.preorder(binaryTree.root) :
-      	order === 'In Order' ?
-      		binaryTree.inorder(binaryTree.root) :
-      		binaryTree.postorder(binaryTree.root);
+			binaryTree.preorder(binaryTree.root) :
+			order === 'In Order' ?
+				binaryTree.inorder(binaryTree.root) :
+				binaryTree.postorder(binaryTree.root);
 
-		orderArray.map((arrayNode, index) => {
+		let displayContent = '';
+		orderArray.forEach((arrayNode, index) => {
 			if (!arrayNode) return;
-			setDisplayContent((prev) => (prev ? `${prev} - ${arrayNode.data}` : arrayNode.data));
-			setTimeout(() => {
-				setNodes((nodes) =>
-					nodes.map((node: Node) =>
-						node.data.label === arrayNode.data
-							? { ...node, className: 'active' }
-							: node
-					)
-				);
-			}, index * 1000);
-			setTimeout(() => {
-				setNodes((nodes) =>
-					nodes.map((node: Node) =>
-						node.data.label === arrayNode.data
-							? { ...node, className: '' }
-							: node
-					)
-				);
-			}, (index + 1) * 1000);
+			displayContent += arrayNode.data + ' - ';
+			highlightNode(arrayNode.data, index);
 		});
+		setDisplayContent(displayContent.slice(0, -3));
 	};
 
 	const preOrder = useCallback(() => handleOrder('Pre Order'), []);
@@ -147,7 +129,6 @@ export default function Layout() {
 		setDisplayTitle(null);
 		setDisplayContent(null);
 	}, []);
-
 
 	return (
 		<S.Container>

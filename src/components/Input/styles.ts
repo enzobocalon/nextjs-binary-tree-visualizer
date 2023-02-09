@@ -4,8 +4,7 @@ import { motion } from 'framer-motion';
 export const Container = styled(motion.div)`
   position: absolute;
   left: 80px;
-  top: 50%;
-  transform: translateY(-50%);
+  top: -50%;
   background-color: white;
   padding: .5rem;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -52,6 +51,16 @@ export const StyledInput = styled.input`
   outline: none;
   background-color: white;
   font-family: inherit;
+
+
+  ::-webkit-outer-spin-button, ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &[type=number] {
+    -moz-appearance: textfield;
+  }
 `;
 
 export const StyledSpan = styled.span`

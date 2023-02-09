@@ -7,13 +7,20 @@ interface Props {
   content: string;
   shouldRender: boolean;
 }
-export default function Tooltip({children, content, shouldRender}: Props) {
+export default function Tooltip({children, content, shouldRender, ...props}: Props) {
 	return (
 		<S.MainContainer>
 			<TooltipPrimitive.Provider>
 				<TooltipPrimitive.Root>
-					<TooltipPrimitive.Trigger asChild>{children}</TooltipPrimitive.Trigger>
-					<TooltipPrimitive.Content side="right" align="center" className='TooltipContent' style={!shouldRender ? {display: 'none'} : {}}>
+					<TooltipPrimitive.Trigger asChild>
+						{children}
+					</TooltipPrimitive.Trigger>
+					<TooltipPrimitive.Content
+						side='right'
+						align="center"
+						className='TooltipContent'
+						style={!shouldRender ? {display: 'none'} : {}}
+						{...props}>
 						{content}
 					</TooltipPrimitive.Content>
 				</TooltipPrimitive.Root>
