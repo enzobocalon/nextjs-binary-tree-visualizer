@@ -21,7 +21,7 @@ export default function Input({label, icon, action, preset, reference}: Props) {
 		<S.Container
 			initial={{opacity: 0, translateX: '-100px', translateY: `${preset === 'add' ? '-180%' : '-80%'}` }}
 			animate={{opacity: 1, translateX: '0', translateY: `${preset === 'add' ? '-180%' : '-80%'}` }}
-			exit={{opacity: 0, translateX: '-100px', translateY: `${preset === 'add' ? '-180%' : '-80%'}` }}
+			exit={{opacity: 0, translateX: '-100px',  translateY: `${preset === 'add' ? '-180%' : '-80%'}`}}
 			transition={{type: 'spring', stiffness: 60}}>
 			<S.InputLabel htmlFor='input'>
 				<S.StyledInput id='input' ref={reference} type='number' onKeyDown={handleSubmit}/>

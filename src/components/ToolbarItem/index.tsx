@@ -54,7 +54,7 @@ export const ToolbarItem = forwardRef<HTMLDivElement, Props>((
 			<S.Item onClick={action}>
 				{icon}
 			</S.Item>
-			<AnimatePresence mode='wait'>
+			<AnimatePresence>
 				{
 					openedMenu === 0 && (
 						<Input
