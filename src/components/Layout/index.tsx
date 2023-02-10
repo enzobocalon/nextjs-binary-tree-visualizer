@@ -108,6 +108,7 @@ export default function Layout() {
 				binaryTree.inorder(binaryTree.root) :
 				binaryTree.postorder(binaryTree.root);
 
+		console.log('orderArray', orderArray);
 		let displayContent = '';
 		orderArray.forEach((arrayNode, index) => {
 			if (!arrayNode) return;
@@ -130,10 +131,23 @@ export default function Layout() {
 		setDisplayContent(null);
 	}, []);
 
+	const removeTreeNode = useCallback((data: number) => {
+		const nodeExists = binaryTree.search(binaryTree.root, data);
+		if (!nodeExists) return;
+
+		binaryTree.remove(data);
+		const newTree = binaryTree.preorder(binaryTree.root);
+		if (!newTree) return;
+
+		resetTree();
+		newTree.forEach(node => addTreeNode(node.data));
+	}, []);
+
 	return (
 		<S.Container>
 			<Toolbar
 				addTreeNode={addTreeNode}
+				removeTreeNode={removeTreeNode}
 				resetTree={resetTree}
 				findRoot={findRoot}
 				preOrder={preOrder}

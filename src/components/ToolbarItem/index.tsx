@@ -13,6 +13,7 @@ interface Props {
   postOrder?: () => void
   inOrder?: () => void
   addTreeNode?: (data: number) => void
+  removeTreeNode?: (data: number) => void
 }
 
 export const ToolbarItem = forwardRef<HTMLDivElement, Props>((
@@ -24,6 +25,7 @@ export const ToolbarItem = forwardRef<HTMLDivElement, Props>((
 		postOrder,
 		inOrder,
 		addTreeNode,
+		removeTreeNode,
 		...props
 	}: Props,
 	forwardedRef) => {
@@ -38,16 +40,26 @@ export const ToolbarItem = forwardRef<HTMLDivElement, Props>((
 		}
 	};
 
+	const handleRemove = () => {
+		if (!inputRef) return;
+		if (!inputRef.current) return;
+		if (Number(inputRef.current.value)) {
+			removeTreeNode!(parseInt(inputRef.current.value));
+			inputRef.current.value = '';
+		}
+	};
+
 	return (
 		<S.ItemContainer ref={forwardedRef} {...props}>
 			<S.Item onClick={action}>
 				{icon}
 			</S.Item>
-			<AnimatePresence>
+			<AnimatePresence mode='wait'>
 				{
 					openedMenu === 0 && (
 						<Input
 							label='Insert a value'
+							preset='add'
 							action={handleAdd}
 							icon={<MdDone />}
 							reference={inputRef}
@@ -56,6 +68,17 @@ export const ToolbarItem = forwardRef<HTMLDivElement, Props>((
 				}
 				{
 					openedMenu === 1 && (
+						<Input
+							label='Remove a value'
+							preset='remove'
+							action={handleRemove}
+							icon={<MdDone />}
+							reference={inputRef}
+							key={'input'}/>
+					)
+				}
+				{
+					openedMenu === 2 && (
 						<Actions
 							key={'actions'}
 							preOrder={preOrder!}

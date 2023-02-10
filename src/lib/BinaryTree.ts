@@ -7,7 +7,7 @@ export class BinaryTree {
 	constructor () {
 		this.root = null;
 		this.dataSet = new Set();
-		this.width = 1200;
+		this.width = 800;
 	}
 
 	insert(data: number) {
@@ -127,6 +127,60 @@ export class BinaryTree {
 		return [];
 	}
 
+	remove(key: number)
+	{
+		this.root = this.deleteRec(this.root, key);
+		return this.root;
+	}
+
+	deleteRec(root: Node | null,key: number): Node | null
+	{
+		if (root == null)
+			return root;
+
+		if (key < root.data)
+			root.left = this.deleteRec(root.left, key);
+		else if (key > root.data)
+			root.right = this.deleteRec(root.right, key);
+		else {
+			if (root.left == null) {
+				return root.right;
+			}
+			else if (root.right == null)
+				return root.left;
+
+			root.data = this.minValue(root.right);
+
+			// Delete the inorder successor
+			root.right = this.deleteRec(root.right, root.data);
+		}
+
+		return root;
+	}
+
+	minValue(root: Node) {
+		let minv = root.data;
+		while (root.left != null)
+		{
+			minv = root.left.data;
+			root = root.left;
+		}
+		return minv;
+	}
+
+	search(node: Node | null, data: number): Node | null {
+		if(node === null)
+			return null;
+
+		else if(data < node.data)
+			return this.search(node.left, data);
+
+		else if(data > node.data)
+			return this.search(node.right, data);
+
+		else
+			return node;
+	}
 }
 
 
