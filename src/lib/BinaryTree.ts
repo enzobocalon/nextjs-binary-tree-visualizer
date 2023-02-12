@@ -39,7 +39,6 @@ export class BinaryTree {
 
 				newNode.setCoordinates(node.getCoordX() - (this.width / Math.pow(2, nodeLevel)) - 2, node.getCoordY() + 100);
 				newNode.setParentID(node.id);
-				newNode.setParent(node);
 				return newNode;
 			} else {
 				return this.insertNode(node.left, newNode);
@@ -53,7 +52,6 @@ export class BinaryTree {
 
 				newNode.setCoordinates(node.getCoordX() + (this.width / Math.pow(2, nodeLevel)) - 2, node.getCoordY() + 100);
 				newNode.setParentID(node.id);
-				newNode.setParent(node);
 				return newNode;
 			} else {
 				return this.insertNode(node.right, newNode);

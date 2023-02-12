@@ -6,13 +6,11 @@ export default class Node {
 	data: number;
 	left: Node | null;
 	right: Node | null;
-	parent: Node | null;
 	private coordX: number;
 	private coordY: number;
 	constructor(data: number) {
 		this.id = crypto.randomUUID();
 		this.parentID = null;
-		this.parent = null;
 		this.data = data;
 		this.left = null;
 		this.right = null;
@@ -30,14 +28,6 @@ export default class Node {
 
 	setParentID(parentID: string) {
 		this.parentID = parentID;
-	}
-
-	setParent(parent: Node) {
-		this.parent = parent;
-	}
-
-	getParent() {
-		return this.parent;
 	}
 
 	setCoordinates(coordX: number, coordY: number) {
